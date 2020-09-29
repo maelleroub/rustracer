@@ -1,0 +1,7 @@
+[package]
+name = "raytracer"
+version = "0.1.0"
+authors = ["Maelle Roubeau <maelle.roubeau@epita.fr>"]
+edition = "2018"
+
+[dependencies]
