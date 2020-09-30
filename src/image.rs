@@ -13,7 +13,10 @@ pub struct Image {
 
 impl Image {
     pub fn print(&self, path: &path::Path) {
-        let file = fs::File::create(&path).expect("Could not create output file");
+        let file = match fs::File::create(&path) {
+            Ok(ret) => ret,
+            Err(_) => panic!("Could not create output file")
+        };
         write_line_to_file(&file, "P3".to_string());
         write_line_to_file(&file, format!("{} {}", self.width, self.height));
         write_line_to_file(&file, MAX_RGB_VALUE.to_string());
