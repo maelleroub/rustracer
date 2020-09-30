@@ -30,4 +30,5 @@ fn main() {
     println!("a - (a / 2.0) = {}", a.to_string());
     let c = &a + &b;
     println!("a + b = {}", c.to_string());
+    println!("Normalized: {}", c.normalize().to_string());
 }

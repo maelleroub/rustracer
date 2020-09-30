@@ -65,4 +65,11 @@ impl Vec3 {
     pub fn new() -> Vec3 {
         Vec3(0.0, 0.0, 0.0)
     }
+    pub fn norm(&self) -> f64 {
+        f64::sqrt(self.0 * self.0 + self.1 * self.1 + self.2 * self.2)
+    }
+    pub fn normalize(&self) -> Vec3 {
+        let norm = self.norm();
+        Vec3(self.0 / norm, self.1 / norm, self.2 / norm)
+    }
 }
