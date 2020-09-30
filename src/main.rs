@@ -18,9 +18,11 @@ fn main() {
         }
     }
     image.print(path::Path::new("output.ppm"));
-    let a = vec3::Vec3(35.0, 47.5, 12.3);
-    let b = vec3::Vec3(35.0, 47.5, 12.3);
+    let mut a = vec3::Vec3(10.0, 5.0, 0.0);
+    let mut b = vec3::Vec3(102.8, 47.5, 12.3);
+    a += &b;
+    a.print();
     let mut c = &a + &b;
-    c += a;
+    c += &a;
     c.print();
 }
