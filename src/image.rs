@@ -1,15 +1,14 @@
 use std::fs;
 use std::io::Write;
 use std::path;
+use super::vec3::Vec3;
 
-pub const MAX_RGB_VALUE: u8 = 255;
-
-pub struct Pixel(pub u8, pub u8, pub u8);
+pub const MAX_RGB_VALUE: f64 = 255.0;
 
 pub struct Image {
     pub width: usize,
     pub height: usize,
-    pub pixels: Vec<Pixel>,
+    pub pixels: Vec<Vec3>,
 }
 
 impl Image {
@@ -22,7 +21,8 @@ impl Image {
         for i in 0..self.height {
             for j in 0..self.width {
                 let p = &self.pixels[i * self.width + j];
-                write_to_file(&file, format!("{} {} {}", p.0, p.1, p.2).to_string());
+                write_to_file(&file, format!("{} {} {}",
+                            p.0 as u64, p.1 as u64, p.2 as u64).to_string());
                 let mut c = ' ';
                 if j == (self.width - 1) {
                     c = '\n';
