@@ -1,11 +1,12 @@
 use std::path;
 mod image;
+mod vec3;
 
 fn main() {
     let mut image = image::Image {
-        width: 1024,
-        height: 1024,
-        pixels: Vec::with_capacity(1024 * 1024),
+        width: 512,
+        height: 512,
+        pixels: Vec::with_capacity(512 * 512),
     };
     for i in 0..image.height {
         for j in 0..image.width {
@@ -17,4 +18,8 @@ fn main() {
         }
     }
     image.print(path::Path::new("output.ppm"));
+    let a = vec3::Vec3(35.0, 47.5, 12.3);
+    let b = vec3::Vec3(35.0, 47.5, 12.3);
+    let c = a + b;
+    c.print();
 }
