@@ -2,6 +2,8 @@ use std::fs;
 use std::io::Write;
 use std::path;
 
+pub const MAX_RGB_VALUE: u8 = 255;
+
 pub struct Pixel(pub u8, pub u8, pub u8);
 
 pub struct Image {
@@ -15,7 +17,7 @@ impl Image {
         let file = fs::File::create(&path).expect("Could not create output file");
         write_line_to_file(&file, "P3".to_string());
         write_line_to_file(&file, format!("{} {}", self.width, self.height));
-        write_line_to_file(&file, "255".to_string());
+        write_line_to_file(&file, MAX_RGB_VALUE.to_string());
 
         for i in 0..self.height {
             for j in 0..self.width {
