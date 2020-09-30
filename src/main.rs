@@ -19,10 +19,15 @@ fn main() {
     }
     image.print(path::Path::new("output.ppm"));
     let mut a = vec3::Vec3(10.0, 5.0, 0.0);
-    let mut b = vec3::Vec3(102.8, 47.5, 12.3);
+    println!("a = {}", a.to_string());
+    let b = vec3::Vec3(102.8, 47.5, 12.3);
+    println!("b = {}", b.to_string());
     a += &b;
-    a.print();
-    let mut c = &a + &b;
-    c += &a;
-    c.print();
+    println!("a + b = {}", a.to_string());
+    a *= 15.0;
+    println!("a * 15 = {}", a.to_string());
+    a = &a - &(&a / 2.0);
+    println!("a - (a / 2.0) = {}", a.to_string());
+    let c = &a + &b;
+    println!("a + b = {}", c.to_string());
 }

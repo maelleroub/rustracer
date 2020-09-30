@@ -1,4 +1,5 @@
 use std::ops;
+use std::fmt;
 
 pub struct Vec3(pub f64, pub f64, pub f64);
 
@@ -54,11 +55,14 @@ impl ops::DivAssign<f64> for Vec3 {
     }
 }
 
+impl fmt::Display for Vec3 {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{{{}, {}, {}}}", self.0, self.1, self.2)
+    }
+}
+
 impl Vec3 {
     pub fn new() -> Vec3 {
         Vec3(0.0, 0.0, 0.0)
-    }
-    pub fn print(&self) {
-        print!("{{ {}, {}, {} }}", self.0, self.1, self.2);
     }
 }
