@@ -1,6 +1,7 @@
 use std::path;
 mod image;
 mod vec3;
+mod ray;
 
 fn main() {
     let mut image = image::Image {
@@ -31,4 +32,9 @@ fn main() {
     let c = &a + &b;
     println!("a + b = {}", c.to_string());
     println!("Normalized: {}", c.normalize().to_string());
+    let r = ray::Ray {
+        origin: a,
+        direction: b,
+    };
+    println!("Ray at 55: {}", r.at(55.0));
 }
