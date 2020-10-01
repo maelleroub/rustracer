@@ -1,6 +1,7 @@
 use std::ops;
 use std::fmt;
 
+#[derive(Clone)]
 pub struct Vec3(pub f64, pub f64, pub f64);
 
 //Addition (Vec3 + Vec3)

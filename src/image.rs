@@ -21,13 +21,13 @@ impl Image {
         write_line_to_file(&file, format!("{} {}", self.width, self.height));
         write_line_to_file(&file, MAX_RGB_VALUE.to_string());
 
-        for i in 0..self.height {
-            for j in 0..self.width {
-                let p = &self.pixels[i * self.width + j];
+        for j in 0..self.height {
+            for i in 0..self.width {
+                let p = &self.pixels[j * self.width + i];
                 write_to_file(&file, format!("{} {} {}",
                             p.0 as u64, p.1 as u64, p.2 as u64).to_string());
                 let mut c = ' ';
-                if j == (self.width - 1) {
+                if i == (self.width - 1) {
                     c = '\n';
                 }
                 write_to_file(&file, c.to_string());
