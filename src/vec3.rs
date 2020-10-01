@@ -91,12 +91,12 @@ impl Vec3 {
         let norm = self.norm();
         Vec3(self.0 / norm, self.1 / norm, self.2 / norm)
     }
-    pub fn dot(&self, rhs: Vec3) -> f64 {
-        self.0 * rhs.0 + self.1 * rhs.1 + self.2 * rhs.2
+    pub fn dot(lhs: Vec3, rhs: Vec3) -> f64 {
+        lhs.0 * rhs.0 + lhs.1 * rhs.1 + lhs.2 * rhs.2
     }
-    pub fn cross(&self, rhs: Vec3) -> Vec3 {
-        Vec3(self.1 * rhs.2 - self.2 * rhs.1,
-             self.2 * rhs.0 - self.0 * rhs.2,
-             self.0 * rhs.1 - self.1 * rhs.0)
+    pub fn cross(lhs: Vec3, rhs: Vec3) -> Vec3 {
+        Vec3(lhs.1 * rhs.2 - lhs.2 * rhs.1,
+             lhs.2 * rhs.0 - lhs.0 * rhs.2,
+             lhs.0 * rhs.1 - lhs.1 * rhs.0)
     }
 }
