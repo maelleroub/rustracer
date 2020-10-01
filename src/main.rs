@@ -21,8 +21,8 @@ fn main() {
     let origin1 = Vec3(0.0, 0.0, 0.0);
     let horizontal = Vec3(viewport_width, 0.0, 0.0);
     let vertical = Vec3(0.0, viewport_height, 0.0);
-    let lower_left_corner = &(&origin1 - &(&horizontal / 2.0))
-        - &(&(&vertical / 2.0) - &Vec3(0.0, 0.0, focal_length));
+    let lower_left_corner = origin1 - (horizontal / 2.0)
+        - (vertical / 2.0) - Vec3(0.0, 0.0, focal_length);
 
     for j in 0..image.height {
         for i in 0..image.width {
@@ -30,11 +30,11 @@ fn main() {
             let v: f64 = (j as f64) / ((image_height - 1) as f64);
             let origin = Vec3(0.0, 0.0, 0.0);
             let r = ray::Ray {
-                direction: &(&lower_left_corner + &(&horizontal * u))
-                    + &(&(&vertical * v) - &origin),
+                direction: lower_left_corner + (horizontal * u)
+                    + (vertical * v) - origin,
                 origin: origin,
             };
-            image.pixels[j * image.width + i] = &r.color() * image::MAX_RGB_VALUE;
+            image.pixels[j * image.width + i] = r.color() * image::MAX_RGB_VALUE;
         }
     }
     image.print(path::Path::new("output.ppm"));
@@ -42,13 +42,13 @@ fn main() {
     println!("a = {}", a.to_string());
     let b = vec3::Vec3(102.8, 47.5, 12.3);
     println!("b = {}", b.to_string());
-    a += &b;
+    a += b;
     println!("a + b = {}", a.to_string());
     a *= 15.0;
     println!("a * 15 = {}", a.to_string());
-    a = &a - &(&a / 2.0);
+    a = a - (a / 2.0);
     println!("a - (a / 2.0) = {}", a.to_string());
-    let c = &a + &b;
+    let c = a + b;
     println!("a + b = {}", c.to_string());
     println!("Normalized: {}", c.normalize().to_string());
     let r = ray::Ray {
