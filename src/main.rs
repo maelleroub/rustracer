@@ -4,6 +4,7 @@ use vec3::Vec3;
 mod ray;
 use std::path;
 mod hittable;
+mod sphere;
 
 fn main() {
     let aspect_ratio: f64 = 16.0 / 9.0;
