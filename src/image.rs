@@ -39,7 +39,7 @@ impl Image {
 
         for j in (0..self.height).rev() {
             for i in 0..self.width {
-                let mut p = self.pixels[j * self.width + i];
+                let p = self.pixels[j * self.width + i];
                 write_to_file(&file, format!("{} {} {}",
                             p.0 as u64, p.1 as u64, p.2 as u64).to_string());
                 let mut c = ' ';

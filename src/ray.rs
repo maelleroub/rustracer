@@ -22,7 +22,7 @@ impl Ray {
         }
 
         if world.hit(*self, 0.001, rt::INFINITY, &mut rec) {
-            let target = rec.p + rec.normal + Vec3::random_in_unit_sphere();
+            let target = rec.p + rec.normal + Vec3::random_unit_vector();
             let r = Ray {
                 origin: rec.p,
                 direction: target - rec.p
