@@ -1,10 +1,13 @@
 use super::ray::Ray;
 use super::vec3::Vec3;
+use super::material::Material;
+use super::material::Lambertian;
 
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub struct HitRecord {
     pub p: Vec3,
     pub normal: Vec3,
+    pub mat_ptr: Box<Material>,
     pub t: f64,
     pub front_face: bool
 }
@@ -14,6 +17,7 @@ impl HitRecord {
         return HitRecord {
             p: Vec3::new(),
             normal: Vec3::new(),
+            mat_ptr: Box::new(Lambertian::new()),
             t: 0.0,
             front_face: false,
         };
@@ -58,7 +62,7 @@ impl Hittable for HittableList {
             if object.hit(r, t_min, closest_so_far, &mut temp_rec) {
                 hit_anything = true;
                 closest_so_far = temp_rec.t;
-                *rec = temp_rec;
+                *rec = temp_rec.clone();
             }
         }
         return hit_anything;
