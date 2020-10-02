@@ -33,18 +33,4 @@ impl Ray {
         let t = 0.5 * (unit_direction.1 + 1.0);
         return (1.0 - t) * Vec3(1.0, 1.0, 1.0) + t * Vec3(0.5, 0.7, 1.0);
     }
-
-    pub fn hit_sphere(&self, center: Vec3, radius: f64) -> f64 {
-        let oc = self.origin - center;
-        let a = self.direction.norm_squared();
-        let half_b = Vec3::dot(oc, self.direction);
-        let c = oc.norm_squared() - radius * radius;
-        let discriminant = half_b * half_b - a * c;
-        if discriminant < 0.0 {
-            return -1.0;
-        }
-        else {
-            return (-half_b - f64::sqrt(discriminant)) / a;
-        }
-    }
 }

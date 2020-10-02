@@ -5,7 +5,6 @@ use vec3::Vec3;
 mod ray;
 use std::path;
 mod hittable;
-use hittable::Hittable;
 use hittable::HittableList;
 mod sphere;
 use sphere::Sphere;
