@@ -17,9 +17,9 @@ impl Image {
         let mut b = pixel_color.2;
 
         let scale = 1.0 / (samples_per_pixel as f64);
-        r *= scale;
-        g *= scale;
-        b *= scale;
+        r = f64::sqrt(scale * r);
+        g = f64::sqrt(scale * g);
+        b = f64::sqrt(scale * b);
 
         Vec3(
             256.0 * clamp(r, 0.0, 0.999),
