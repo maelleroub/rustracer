@@ -1,4 +1,5 @@
 mod image;
+use image::Image;
 mod vec3;
 use vec3::Vec3;
 mod ray;
@@ -50,10 +51,11 @@ fn main() {
                 let r = camera.get_ray(u, v);
                 pixel_color += r.color(&world);
             }
+            pixel_color = Image::adjust_color(pixel_color, samples_per_pixel);
             image.pixels[j * image.width + i] = pixel_color;
         }
     }
     let output_file: &str = "output.ppm";
-    image.print(path::Path::new(output_file), samples_per_pixel);
+    image.print(path::Path::new(output_file));
     println!("Wrote output image to {}", output_file);
 }

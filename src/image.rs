@@ -28,7 +28,7 @@ impl Image {
         )
     }
 
-    pub fn print(&self, path: &path::Path, samples_per_pixel: u32) {
+    pub fn print(&self, path: &path::Path) {
         let file = match fs::File::create(&path) {
             Ok(ret) => ret,
             Err(_) => panic!("Could not create output file")
@@ -40,7 +40,6 @@ impl Image {
         for j in (0..self.height).rev() {
             for i in 0..self.width {
                 let mut p = self.pixels[j * self.width + i];
-                p = Image::adjust_color(p, samples_per_pixel);
                 write_to_file(&file, format!("{} {} {}",
                             p.0 as u64, p.1 as u64, p.2 as u64).to_string());
                 let mut c = ' ';
