@@ -24,7 +24,7 @@ fn main() {
     let lower_left_corner = origin1 - (horizontal / 2.0)
         - (vertical / 2.0) - Vec3(0.0, 0.0, focal_length);
 
-    for j in 0..image.height {
+    for j in (0..image.height).rev() {
         for i in 0..image.width {
             let u: f64 = (i as f64) / ((image_width - 1) as f64);
             let v: f64 = (j as f64) / ((image_height - 1) as f64);

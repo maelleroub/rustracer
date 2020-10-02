@@ -21,7 +21,7 @@ impl Image {
         write_line_to_file(&file, format!("{} {}", self.width, self.height));
         write_line_to_file(&file, MAX_RGB_VALUE.to_string());
 
-        for j in 0..self.height {
+        for j in (0..self.height).rev() {
             for i in 0..self.width {
                 let p = &self.pixels[j * self.width + i];
                 write_to_file(&file, format!("{} {} {}",
