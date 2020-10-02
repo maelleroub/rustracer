@@ -17,7 +17,12 @@ impl Ray {
     pub fn color(&self, world: &impl Hittable) -> Vec3 {
         let mut rec = HitRecord::new();
         if world.hit(*self, 0.0, rt::INFINITY, &mut rec) {
-            return 0.5 * (rec.normal + Vec3(1.0, 1.0, 1.0));
+            let target = rec.p + rec.normal + Vec3::random_in_unit_sphere();
+            let r = Ray {
+                origin: rec.p,
+                direction: target - rec.p
+            };
+            return 0.5 * r.color(world);
         }
         let unit_direction = self.direction.normalize();
         let t = 0.5 * (unit_direction.1 + 1.0);

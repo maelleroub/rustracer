@@ -1,5 +1,6 @@
 use std::ops;
 use std::fmt;
+use super::rt;
 
 #[derive(Clone, Copy)]
 pub struct Vec3(pub f64, pub f64, pub f64);
@@ -89,25 +90,58 @@ impl fmt::Display for Vec3 {
 }
 
 impl Vec3 {
+    #[inline]
     pub fn new() -> Vec3 {
         Vec3(0.0, 0.0, 0.0)
     }
+
+    #[inline]
     pub fn norm_squared(&self) -> f64 {
         self.0 * self.0 + self.1 * self.1 + self.2 * self.2
     }
+
+    #[inline]
     pub fn norm(&self) -> f64 {
         self.norm_squared().sqrt()
     }
+
+    #[inline]
     pub fn normalize(&self) -> Vec3 {
         let norm = self.norm();
         Vec3(self.0 / norm, self.1 / norm, self.2 / norm)
     }
+
+    #[inline]
     pub fn dot(lhs: Vec3, rhs: Vec3) -> f64 {
         lhs.0 * rhs.0 + lhs.1 * rhs.1 + lhs.2 * rhs.2
     }
+
+    #[inline]
     pub fn cross(lhs: Vec3, rhs: Vec3) -> Vec3 {
         Vec3(lhs.1 * rhs.2 - lhs.2 * rhs.1,
              lhs.2 * rhs.0 - lhs.0 * rhs.2,
              lhs.0 * rhs.1 - lhs.1 * rhs.0)
+    }
+
+    #[inline]
+    pub fn random() -> Vec3 {
+        Vec3(rt::random_double(), rt::random_double(), rt::random_double())
+    }
+
+    #[inline]
+    pub fn random_range(min: f64, max: f64) -> Vec3 {
+        Vec3(
+            rt::random_double_range(min, max),
+            rt::random_double_range(min, max),
+            rt::random_double_range(min, max)
+        )
+    }
+
+    pub fn random_in_unit_sphere() -> Vec3 {
+        loop {
+            let p = Vec3::random_range(-1.0, 1.0);
+            if p.norm_squared() >= 1.0 { continue; }
+            return p;
+        }
     }
 }
