@@ -1,4 +1,7 @@
+use super::rt;
 use super::vec3::Vec3;
+use super::hittable::HitRecord;
+use super::hittable::Hittable;
 
 #[derive(Clone, Copy)]
 pub struct Ray {
@@ -11,15 +14,14 @@ impl Ray {
         self.origin + (self.direction * t)
     }
 
-    pub fn color(&self) -> Vec3 {
-        let mut t = self.hit_sphere(Vec3(0.0, 0.0, -1.0), 0.5);
-        if t > 0.0 {
-            let n = (self.at(t) - Vec3(0.0, 0.0, -1.0)).normalize();
-            return Vec3(n.0 + 1.0, n.1 + 1.0, n.2 + 1.0) * 0.5;
+    pub fn color(&self, world: &impl Hittable) -> Vec3 {
+        let mut rec = HitRecord::new();
+        if world.hit(*self, 0.0, rt::INFINITY, &mut rec) {
+            return 0.5 * (rec.normal + Vec3(1.0, 1.0, 1.0));
         }
         let unit_direction = self.direction.normalize();
-        t = 0.5 * (unit_direction.1 + 1.0);
-        Vec3(1.0, 1.0, 1.0) * (1.0 - t) + (Vec3(0.5, 0.7, 1.0) * t)
+        let t = 0.5 * (unit_direction.1 + 1.0);
+        return (1.0 - t) * Vec3(1.0, 1.0, 1.0) + t * Vec3(0.5, 0.7, 1.0);
     }
 
     pub fn hit_sphere(&self, center: Vec3, radius: f64) -> f64 {

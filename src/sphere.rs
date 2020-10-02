@@ -4,8 +4,8 @@ use super::hittable::Hittable;
 use super::hittable::HitRecord;
 
 pub struct Sphere {
-    center: Vec3,
-    radius: f64
+    pub center: Vec3,
+    pub radius: f64
 }
 
 impl Hittable for Sphere {
@@ -34,7 +34,6 @@ impl Hittable for Sphere {
                 return true;
             }
         }
-
         false
     }
 }

@@ -4,10 +4,14 @@ use vec3::Vec3;
 mod ray;
 use std::path;
 mod hittable;
+use hittable::Hittable;
+use hittable::HittableList;
 mod sphere;
+use sphere::Sphere;
 mod rt;
 
 fn main() {
+    //Image
     let aspect_ratio: f64 = 16.0 / 9.0;
     let image_width = 400;
     let image_height = ((image_width as f64) / aspect_ratio) as usize;
@@ -17,6 +21,18 @@ fn main() {
         pixels: vec!(Vec3(0.0, 0.0, 0.0); image_width * image_height),
     };
 
+    //World
+    let mut world = HittableList::new();
+    world.add(Box::new(Sphere {
+        center: Vec3(0.0, 0.0, -1.0),
+        radius: 0.5
+    }));
+    world.add(Box::new(Sphere {
+        center: Vec3(0.0, -100.5, -1.0),
+        radius: 100.0
+    }));
+
+    //Camera
     let viewport_height = 2.0;
     let viewport_width = aspect_ratio * viewport_height;
     let focal_length = 1.0;
@@ -36,7 +52,8 @@ fn main() {
                 direction: lower_left_corner + (horizontal * u)
                     + (vertical * v) - origin,
             };
-            image.pixels[j * image.width + i] = r.color() * image::MAX_RGB_VALUE;
+            let pixel_color = r.color(&world) * image::MAX_RGB_VALUE;
+            image.pixels[j * image.width + i] = pixel_color;
         }
     }
     let output_file: &str = "output.ppm";
