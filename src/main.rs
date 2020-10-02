@@ -39,23 +39,7 @@ fn main() {
             image.pixels[j * image.width + i] = r.color() * image::MAX_RGB_VALUE;
         }
     }
-    image.print(path::Path::new("output.ppm"));
-    let mut a = vec3::Vec3(10.0, 5.0, 0.0);
-    println!("a = {}", a.to_string());
-    let b = vec3::Vec3(102.8, 47.5, 12.3);
-    println!("b = {}", b.to_string());
-    a += b;
-    println!("a + b = {}", a.to_string());
-    a *= 15.0;
-    println!("a * 15 = {}", a.to_string());
-    a = a - (a / 2.0);
-    println!("a - (a / 2.0) = {}", a.to_string());
-    let c = a + b;
-    println!("a + b = {}", c.to_string());
-    println!("Normalized: {}", c.normalize().to_string());
-    let r = ray::Ray {
-        origin: a,
-        direction: b,
-    };
-    println!("Ray at 55: {}", r.at(55.0));
+    let output_file: &str = "output.ppm";
+    image.print(path::Path::new(output_file));
+    println!("Wrote output image to {}", output_file);
 }
