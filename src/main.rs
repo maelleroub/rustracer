@@ -18,7 +18,8 @@ fn main() {
     let aspect_ratio: f64 = 16.0 / 9.0;
     let image_width = 400;
     let image_height = ((image_width as f64) / aspect_ratio) as usize;
-    let samples_per_pixel = 100;
+    let samples_per_pixel = 50;
+    let max_depth = 50;
 
     let mut image = image::Image {
         width: image_width,
@@ -49,7 +50,7 @@ fn main() {
                 let v = ((j as f64) + rt::random_double())
                         / ((image.height - 1) as f64);
                 let r = camera.get_ray(u, v);
-                pixel_color += r.color(&world);
+                pixel_color += r.color(&world, max_depth);
             }
             pixel_color = Image::adjust_color(pixel_color, samples_per_pixel);
             image.pixels[j * image.width + i] = pixel_color;

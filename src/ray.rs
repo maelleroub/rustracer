@@ -14,15 +14,20 @@ impl Ray {
         self.origin + (self.direction * t)
     }
 
-    pub fn color(&self, world: &impl Hittable) -> Vec3 {
+    pub fn color(&self, world: &impl Hittable, depth: i32) -> Vec3 {
         let mut rec = HitRecord::new();
+
+        if depth <= 0 {
+            return Vec3(0.0, 0.0, 0.0);
+        }
+
         if world.hit(*self, 0.0, rt::INFINITY, &mut rec) {
             let target = rec.p + rec.normal + Vec3::random_in_unit_sphere();
             let r = Ray {
                 origin: rec.p,
                 direction: target - rec.p
             };
-            return 0.5 * r.color(world);
+            return 0.5 * r.color(world, depth - 1);
         }
         let unit_direction = self.direction.normalize();
         let t = 0.5 * (unit_direction.1 + 1.0);
