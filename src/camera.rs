@@ -1,7 +1,7 @@
 use super::vec3::Vec3;
 use super::ray::Ray;
 
-struct Camera {
+pub struct Camera {
     origin: Vec3,
     lower_left_corner: Vec3,
     horizontal: Vec3,
