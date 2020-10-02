@@ -20,21 +20,20 @@ fn main() {
     let viewport_width = aspect_ratio * viewport_height;
     let focal_length = 1.0;
 
-    let origin1 = Vec3(0.0, 0.0, 0.0);
+    let origin = Vec3(0.0, 0.0, 0.0);
     let horizontal = Vec3(viewport_width, 0.0, 0.0);
     let vertical = Vec3(0.0, viewport_height, 0.0);
-    let lower_left_corner = origin1 - (horizontal / 2.0)
+    let lower_left_corner = origin - (horizontal / 2.0)
         - (vertical / 2.0) - Vec3(0.0, 0.0, focal_length);
 
     for j in (0..image.height).rev() {
         for i in 0..image.width {
             let u: f64 = (i as f64) / ((image_width - 1) as f64);
             let v: f64 = (j as f64) / ((image_height - 1) as f64);
-            let origin = Vec3(0.0, 0.0, 0.0);
             let r = ray::Ray {
+                origin: origin,
                 direction: lower_left_corner + (horizontal * u)
                     + (vertical * v) - origin,
-                origin: origin,
             };
             image.pixels[j * image.width + i] = r.color() * image::MAX_RGB_VALUE;
         }
