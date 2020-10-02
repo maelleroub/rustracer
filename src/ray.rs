@@ -23,15 +23,15 @@ impl Ray {
 
     pub fn hit_sphere(&self, center: Vec3, radius: f64) -> f64 {
         let oc = self.origin - center;
-        let a = Vec3::dot(self.direction, self.direction);
-        let b = Vec3::dot(oc, self.direction) * 2.0;
-        let c = Vec3::dot(oc, oc) - radius * radius;
-        let discriminant = b * b - 4.0 * a * c;
+        let a = self.direction.norm_squared();
+        let half_b = Vec3::dot(oc, self.direction);
+        let c = oc.norm_squared() - radius * radius;
+        let discriminant = half_b * half_b - a * c;
         if discriminant < 0.0 {
             return -1.0;
         }
         else {
-            return (-b - f64::sqrt(discriminant)) / (2.0 * a);
+            return (-half_b - f64::sqrt(discriminant)) / a;
         }
     }
 }
