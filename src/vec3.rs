@@ -60,6 +60,14 @@ impl ops::MulAssign<f64> for Vec3 {
     }
 }
 
+//Multiplication (f64 * Vec3)
+impl ops::Mul<Vec3> for f64 {
+    type Output = Vec3;
+    fn mul(self, v: Vec3) -> Vec3 {
+        v * self
+    }
+}
+
 //Division (Vec3 / f64)
 impl ops::Div<f64> for Vec3 {
     type Output = Vec3;
