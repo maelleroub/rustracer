@@ -9,6 +9,7 @@ use hittable::HittableList;
 mod sphere;
 use sphere::Sphere;
 mod rt;
+mod camera;
 
 fn main() {
     //Image
