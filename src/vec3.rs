@@ -143,4 +143,8 @@ impl Vec3 {
         let r = f64::sqrt(1.0 - z * z);
         Vec3(r * f64::cos(a), r * f64::sin(a), z)
     }
+
+    pub fn reflect(v: Vec3, n: Vec3) -> Vec3 {
+        v - 2.0 * Vec3::dot(v, n) * n
+    }
 }

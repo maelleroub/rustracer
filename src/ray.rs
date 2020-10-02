@@ -10,6 +10,13 @@ pub struct Ray {
 }
 
 impl Ray {
+    pub fn new() -> Ray {
+        Ray {
+            origin: Vec3::new(),
+            direction: Vec3::new()
+        }
+    }
+
     pub fn at(&self, t: f64) -> Vec3 {
         self.origin + (self.direction * t)
     }
@@ -22,12 +29,12 @@ impl Ray {
         }
 
         if world.hit(*self, 0.001, rt::INFINITY, &mut rec) {
-            let target = rec.p + rec.normal + Vec3::random_unit_vector();
-            let r = Ray {
-                origin: rec.p,
-                direction: target - rec.p
-            };
-            return 0.5 * r.color(world, depth - 1);
+            let mut scattered = Ray::new();
+            let mut attenuation = Vec3::new();
+            if rec.mat_ptr.scatter(*self, rec.clone(), &mut attenuation, &mut scattered) {
+                return attenuation * scattered.color(world, depth - 1);
+            }
+            return Vec3::new();
         }
         let unit_direction = self.direction.normalize();
         let t = 0.5 * (unit_direction.1 + 1.0);

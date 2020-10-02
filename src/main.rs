@@ -11,6 +11,9 @@ use sphere::Sphere;
 mod rt;
 mod camera;
 use camera::Camera;
+mod material;
+use material::Lambertian;
+use material::Metal;
 
 fn main() {
     //Image
@@ -28,13 +31,31 @@ fn main() {
 
     //World
     let mut world = HittableList::new();
-    world.add(Box::new(Sphere {
-        center: Vec3(0.0, 0.0, -1.0),
-        radius: 0.5
-    }));
+
+    let material_ground = Box::new(Lambertian { albedo: Vec3(0.8, 0.8, 0.0) });
+    let material_center = Box::new(Lambertian { albedo: Vec3(0.7, 0.3, 0.3) });
+    let material_left = Box::new(Metal { albedo: Vec3(0.8, 0.8, 0.8) });
+    let material_right = Box::new(Metal { albedo: Vec3(0.8, 0.6, 0.2) });
+
     world.add(Box::new(Sphere {
         center: Vec3(0.0, -100.5, -1.0),
-        radius: 100.0
+        radius: 100.0,
+        mat_ptr: material_ground
+    }));
+    world.add(Box::new(Sphere {
+        center: Vec3(0.0, 0.0, -1.0),
+        radius: 0.5,
+        mat_ptr: material_center
+    }));
+    world.add(Box::new(Sphere {
+        center: Vec3(-1.0, 0.0, -1.0),
+        radius: 0.5,
+        mat_ptr: material_left
+    }));
+    world.add(Box::new(Sphere {
+        center: Vec3(1.0, 0.0, -1.0),
+        radius: 0.5,
+        mat_ptr: material_right
     }));
 
     //Camera

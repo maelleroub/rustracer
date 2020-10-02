@@ -2,10 +2,12 @@ use super::vec3::Vec3;
 use super::ray::Ray;
 use super::hittable::Hittable;
 use super::hittable::HitRecord;
+use super::material::Material;
 
 pub struct Sphere {
     pub center: Vec3,
-    pub radius: f64
+    pub radius: f64,
+    pub mat_ptr: Box<Material>
 }
 
 impl Hittable for Sphere {
@@ -22,7 +24,9 @@ impl Hittable for Sphere {
             if temp < t_max && temp > t_min {
                 rec.t = temp;
                 rec.p = r.at(rec.t);
-                rec.normal = (rec.p - self.center) / self.radius;
+                let outward_normal = (rec.p - self.center) / self.radius;
+                rec.set_face_normal(r, outward_normal);
+                rec.mat_ptr = self.mat_ptr.clone();
                 return true;
             }
 
@@ -30,7 +34,9 @@ impl Hittable for Sphere {
             if temp < t_max && temp > t_min {
                 rec.t = temp;
                 rec.p = r.at(rec.t);
-                rec.normal = (rec.p - self.center) / self.radius;
+                let outward_normal = (rec.p - self.center) / self.radius;
+                rec.set_face_normal(r, outward_normal);
+                rec.mat_ptr = self.mat_ptr.clone();
                 return true;
             }
         }
