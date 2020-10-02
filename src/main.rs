@@ -5,6 +5,7 @@ mod ray;
 use std::path;
 mod hittable;
 mod sphere;
+mod rt;
 
 fn main() {
     let aspect_ratio: f64 = 16.0 / 9.0;
