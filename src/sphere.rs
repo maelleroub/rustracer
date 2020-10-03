@@ -10,6 +10,17 @@ pub struct Sphere {
     pub mat_ptr: Box<Material>
 }
 
+impl Sphere {
+    pub fn new_center_radius_mat(center: Vec3, radius: f64,
+    mat_ptr: Box<Material>) -> Sphere {
+        Sphere {
+            center: center,
+            radius: radius,
+            mat_ptr: mat_ptr
+        }
+    }
+}
+
 impl Hittable for Sphere {
     fn hit(&self, r: Ray, t_min: f64, t_max: f64, rec: &mut HitRecord) -> bool {
         let oc = r.origin - self.center;
