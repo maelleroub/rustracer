@@ -3,7 +3,8 @@ use super::ray::Ray;
 use super::hittable::HitRecord;
 
 pub trait Material {
-    fn scatter(&self, r_in: Ray, rec: HitRecord, attenuation: &mut Vec3, scattered: &mut Ray) -> bool;
+    fn scatter(&self, r_in: Ray, rec: HitRecord, attenuation: &mut Vec3,
+    scattered: &mut Ray) -> bool;
     fn box_clone(&self) -> Box<Material>;
 }
 
@@ -25,7 +26,8 @@ impl Lambertian {
 }
 
 impl Material for Lambertian {
-    fn scatter(&self, r_in: Ray, rec: HitRecord, attenuation: &mut Vec3, scattered: &mut Ray) -> bool {
+    fn scatter(&self, r_in: Ray, rec: HitRecord, attenuation: &mut Vec3,
+    scattered: &mut Ray) -> bool {
         let scatter_direction = rec.normal + Vec3::random_unit_vector();
         *scattered = Ray {
             origin: rec.p,
@@ -60,7 +62,8 @@ impl Metal {
 }
 
 impl Material for Metal {
-    fn scatter(&self, r_in: Ray, rec: HitRecord, attenuation: &mut Vec3, scattered: &mut Ray) -> bool {
+    fn scatter(&self, r_in: Ray, rec: HitRecord, attenuation: &mut Vec3,
+    scattered: &mut Ray) -> bool {
         let reflected = Vec3::reflect(r_in.direction.normalize(), rec.normal);
         *scattered = Ray {
             origin: rec.p,
@@ -68,6 +71,43 @@ impl Material for Metal {
         };
         *attenuation = self.albedo;
         return Vec3::dot(scattered.direction, rec.normal) > 0.0;
+    }
+
+    fn box_clone(&self) -> Box<Material> {
+        Box::new((*self).clone())
+    }
+}
+
+#[derive(Clone)]
+pub struct Dielectric {
+    pub ref_idx: f64
+}
+
+impl Dielectric {
+    pub fn new() -> Dielectric {
+        Dielectric { ref_idx: 0.0 }
+    }
+    pub fn new_ref_idx(f: f64) -> Dielectric {
+        Dielectric { ref_idx: f }
+    }
+}
+
+impl Material for Dielectric {
+    fn scatter(&self, r_in: Ray, rec: HitRecord, attenuation: &mut Vec3,
+    scattered: &mut Ray) -> bool {
+        *attenuation = Vec3(1.0, 1.0, 1.0);
+        let etai_over_etat = if rec.front_face {
+            1.0 / self.ref_idx
+        } else {
+            self.ref_idx
+        };
+        let unit_direction = r_in.direction.normalize();
+        let refracted = Vec3::refract(unit_direction, rec.normal, etai_over_etat);
+        *scattered = Ray {
+            origin: rec.p,
+            direction: refracted
+        };
+        return true;
     }
 
     fn box_clone(&self) -> Box<Material> {

@@ -14,6 +14,7 @@ use camera::Camera;
 mod material;
 use material::Lambertian;
 use material::Metal;
+use material::Dielectric;
 
 fn main() {
     //Image
@@ -33,9 +34,8 @@ fn main() {
     let mut world = HittableList::new();
 
     let material_ground = Box::new(Lambertian { albedo: Vec3(0.8, 0.8, 0.0) });
-    let material_center = Box::new(Lambertian { albedo: Vec3(0.7, 0.3, 0.3) });
-    let material_left = Box::new(Metal::new_albedo_fuzz(Vec3(0.8, 0.8, 0.8),
-                                                        0.3));
+    let material_center = Box::new(Dielectric::new_ref_idx(1.5));
+    let material_left = Box::new(Dielectric::new_ref_idx(1.5));
     let material_right = Box::new(Metal::new_albedo_fuzz(Vec3(0.8, 0.6, 0.2),
                                                         1.0));
 
