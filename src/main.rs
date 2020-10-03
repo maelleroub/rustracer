@@ -16,10 +16,56 @@ use material::Lambertian;
 use material::Metal;
 use material::Dielectric;
 
+fn random_scene() -> HittableList {
+    let mut world = HittableList::new();
+    let material_ground = Box::new(Lambertian::new_albedo(Vec3(0.5, 0.5, 0.5)));
+    world.add(Box::new(Sphere::new_center_radius_mat(
+                        Vec3(0.0, -1000.0, 0.0),
+                        1000.0,
+                        material_ground)));
+    for a in -11..11 {
+        for b in -11..11 {
+            let choose_mat = rt::random_double();
+            let center = Vec3((a as f64) + 0.9 * rt::random_double(),
+            0.2,
+            (b as f64) + 0.9 * rt::random_double());
+
+            if (center - Vec3(4.0, 0.2, 0.0)).norm() > 0.9 {
+                if choose_mat < 0.8 {
+                    //Diffuse
+                    let albedo = Vec3::random() * Vec3::random();
+                    let mat = Box::new(Lambertian::new_albedo(albedo));
+                    world.add(Box::new(Sphere::new_center_radius_mat(center, 0.2, mat)));
+                } else if choose_mat < 0.95 {
+                    //Metal
+                    let albedo = Vec3::random_range(0.5, 1.0);
+                    let fuzz = rt::random_double_range(0.0, 0.5);
+                    let mat = Box::new(Metal::new_albedo_fuzz(albedo, fuzz));
+                    world.add(Box::new(Sphere::new_center_radius_mat(center, 0.2, mat)));
+                } else {
+                    //Glass
+                    let mat = Box::new(Dielectric::new_ref_idx(1.5));
+                    world.add(Box::new(Sphere::new_center_radius_mat(center, 0.2, mat)));
+                }
+            }
+        }
+    }
+    let material1 = Box::new(Dielectric::new_ref_idx(1.5));
+    world.add(Box::new(Sphere::new_center_radius_mat(Vec3(0.0, 1.0, 0.0), 1.0, material1)));
+
+    let material2 = Box::new(Lambertian::new_albedo(Vec3(0.4, 0.2, 0.1)));
+    world.add(Box::new(Sphere::new_center_radius_mat(Vec3(-4.0, 1.0, 0.0), 1.0, material2)));
+
+    let material3 = Box::new(Metal::new_albedo_fuzz(Vec3(0.7, 0.6, 0.5), 0.0));
+    world.add(Box::new(Sphere::new_center_radius_mat(Vec3(4.0, 1.0, 0.0), 1.0, material3)));
+
+    return world;
+}
+
 fn main() {
     //Image
-    let aspect_ratio: f64 = 16.0 / 9.0;
-    let image_width = 400;
+    let aspect_ratio: f64 = 3.0 / 2.0;
+    let image_width = 800;
     let image_height = ((image_width as f64) / aspect_ratio) as usize;
     let samples_per_pixel = 50;
     let max_depth = 50;
@@ -31,41 +77,14 @@ fn main() {
     };
 
     //World
-    let R = f64::cos(rt::PI / 4.0);
-    let mut world = HittableList::new();
-
-    let material_ground = Box::new(Lambertian::new_albedo(Vec3(0.8, 0.8, 0.0)));
-    let material_center = Box::new(Lambertian::new_albedo(Vec3(0.1, 0.2, 0.5)));
-    let material_left = Box::new(Dielectric::new_ref_idx(1.5));
-    let material_right = Box::new(Metal::new_albedo_fuzz(Vec3(0.8, 0.6, 0.2), 0.0));
-
-    world.add(Box::new(Sphere::new_center_radius_mat(
-                        Vec3(0.0, -100.5, -1.0),
-                        100.0,
-                        material_ground)));
-    world.add(Box::new(Sphere::new_center_radius_mat(
-                        Vec3(0.0, 0.0, -1.0),
-                        0.5,
-                        material_center)));
-    world.add(Box::new(Sphere::new_center_radius_mat(
-                        Vec3(-1.0, 0.0, -1.0),
-                        0.5,
-                        material_left.clone())));
-    world.add(Box::new(Sphere::new_center_radius_mat(
-                        Vec3(-1.0, 0.0, -1.0),
-                        -0.45,
-                        material_left)));
-    world.add(Box::new(Sphere::new_center_radius_mat(
-                        Vec3(1.0, 0.0, -1.0),
-                        0.5,
-                        material_right)));
+    let world = random_scene();
 
     //Camera
-    let lookfrom = Vec3(3.0, 3.0, 2.0);
-    let lookat = Vec3(0.0, 0.0, -1.0);
+    let lookfrom = Vec3(13.0, 2.0, 3.0);
+    let lookat = Vec3(0.0, 0.0, 0.0);
     let vup = Vec3(0.0, 1.0, 0.0);
-    let dist_to_focus = (lookfrom - lookat).norm();
-    let aperture = 2.0;
+    let dist_to_focus = 10.0;
+    let aperture = 0.1;
     let camera = Camera::new(lookfrom, lookat, vup, 20.0, aspect_ratio,
                              aperture, dist_to_focus);
 
@@ -83,6 +102,7 @@ fn main() {
             pixel_color = Image::adjust_color(pixel_color, samples_per_pixel);
             image.pixels[j * image.width + i] = pixel_color;
         }
+        println!("Finished line {}", j);
     }
     let output_file: &str = "output.ppm";
     image.print(path::Path::new(output_file));
