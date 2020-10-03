@@ -112,8 +112,7 @@ impl Material for Dielectric {
         };
         let unit_direction = r_in.direction.normalize();
 
-        let cos_theta = f64::min(Vec3::dot((-1.0) * unit_direction, rec.normal),
-                                1.0);
+        let cos_theta = f64::min(Vec3::dot(-unit_direction, rec.normal), 1.0);
         let sin_theta = f64::sqrt(1.0 - cos_theta * cos_theta);
         if etai_over_etat * sin_theta > 1.0 {
             let reflected = Vec3::reflect(unit_direction, rec.normal);

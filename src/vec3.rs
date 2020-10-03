@@ -83,6 +83,14 @@ impl ops::DivAssign<f64> for Vec3 {
     }
 }
 
+//Negation (-Vec3)
+impl ops::Neg for Vec3 {
+    type Output = Vec3;
+    fn neg(self) -> Self::Output {
+        Vec3(-self.0, -self.1, -self.2)
+    }
+}
+
 impl fmt::Display for Vec3 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{{{}, {}, {}}}", self.0, self.1, self.2)
@@ -157,7 +165,7 @@ impl Vec3 {
     }
 
     pub fn refract(uv: Vec3, n: Vec3, etai_over_etat: f64) -> Vec3 {
-        let cos_theta = Vec3::dot((-1.0) * uv, n);
+        let cos_theta = Vec3::dot(-uv, n);
         let r_out_perp = etai_over_etat * (uv + cos_theta * n);
         let r_out_parallel =
             -(f64::abs(1.0 - r_out_perp.norm_squared())).sqrt() * n;
