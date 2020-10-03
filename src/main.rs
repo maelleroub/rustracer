@@ -34,10 +34,10 @@ fn main() {
     let mut world = HittableList::new();
 
     let material_ground = Box::new(Lambertian { albedo: Vec3(0.8, 0.8, 0.0) });
-    let material_center = Box::new(Dielectric::new_ref_idx(1.5));
+    let material_center = Box::new(Lambertian { albedo: Vec3(0.1, 0.2, 0.5)});
     let material_left = Box::new(Dielectric::new_ref_idx(1.5));
     let material_right = Box::new(Metal::new_albedo_fuzz(Vec3(0.8, 0.6, 0.2),
-                                                        1.0));
+                                                        0.0));
 
     world.add(Box::new(Sphere {
         center: Vec3(0.0, -100.5, -1.0),
