@@ -1,6 +1,13 @@
 use super::vec3::Vec3;
 use super::ray::Ray;
 use super::hittable::HitRecord;
+use super::rt;
+
+fn schlick(cosine: f64, ref_idx: f64) -> f64 {
+    let mut r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
+    r0 *= r0;
+    return r0 + (1.0 - r0) * f64::powi(1.0 - cosine, 5);
+}
 
 pub trait Material {
     fn scatter(&self, r_in: Ray, rec: HitRecord, attenuation: &mut Vec3,
@@ -112,6 +119,16 @@ impl Material for Dielectric {
                 origin: rec.p,
                 direction: reflected
             };
+        }
+
+        let reflect_prob = schlick(cos_theta, etai_over_etat);
+        if rt::random_double() < reflect_prob {
+            let reflected = Vec3::reflect(unit_direction, rec.normal);
+            *scattered = Ray {
+                origin: rec.p,
+                direction: reflected
+            };
+            return true;
         }
 
         let refracted = Vec3::refract(unit_direction, rec.normal, etai_over_etat);
