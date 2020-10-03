@@ -31,42 +31,25 @@ fn main() {
     };
 
     //World
+    let R = f64::cos(rt::PI / 4.0);
     let mut world = HittableList::new();
 
-    let material_ground = Box::new(Lambertian { albedo: Vec3(0.8, 0.8, 0.0) });
-    let material_center = Box::new(Lambertian { albedo: Vec3(0.1, 0.2, 0.5)});
-    let material_left = Box::new(Dielectric::new_ref_idx(1.5));
-    let material_right = Box::new(Metal::new_albedo_fuzz(Vec3(0.8, 0.6, 0.2),
-                                                        0.0));
+    let material_left = Box::new(Lambertian { albedo: Vec3(0.0, 0.0, 1.0) });
+    let material_right = Box::new(Lambertian { albedo: Vec3(1.0, 0.0, 0.0)});
 
     world.add(Box::new(Sphere {
-        center: Vec3(0.0, -100.5, -1.0),
-        radius: 100.0,
-        mat_ptr: material_ground
-    }));
-    world.add(Box::new(Sphere {
-        center: Vec3(0.0, 0.0, -1.0),
-        radius: 0.5,
-        mat_ptr: material_center
-    }));
-    world.add(Box::new(Sphere {
-        center: Vec3(-1.0, 0.0, -1.0),
-        radius: 0.5,
-        mat_ptr: material_left.clone()
-    }));
-    world.add(Box::new(Sphere {
-        center: Vec3(-1.0, 0.0, -1.0),
-        radius: -0.4,
+        center: Vec3(-R, 0.0, -1.0),
+        radius: R,
         mat_ptr: material_left
     }));
     world.add(Box::new(Sphere {
-        center: Vec3(1.0, 0.0, -1.0),
-        radius: 0.5,
+        center: Vec3(R, 0.0, -1.0),
+        radius: R,
         mat_ptr: material_right
     }));
 
     //Camera
-    let camera = Camera::new();
+    let camera = Camera::new(90.0, aspect_ratio);
 
     for j in (0..image.height).rev() {
         for i in 0..image.width {
