@@ -137,6 +137,14 @@ impl Vec3 {
         )
     }
 
+    pub fn random_in_unit_sphere() -> Vec3 {
+        loop {
+            let p = Vec3::random_range(-1.0, 1.0);
+            if p.norm_squared() >= 1.0 { continue; }
+            return p;
+        }
+    }
+
     pub fn random_unit_vector() -> Vec3 {
         let a = rt::random_double_range(0.0, 2.0 * rt::PI);
         let z = rt::random_double_range(-1.0, 1.0);

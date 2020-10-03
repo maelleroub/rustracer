@@ -34,8 +34,10 @@ fn main() {
 
     let material_ground = Box::new(Lambertian { albedo: Vec3(0.8, 0.8, 0.0) });
     let material_center = Box::new(Lambertian { albedo: Vec3(0.7, 0.3, 0.3) });
-    let material_left = Box::new(Metal { albedo: Vec3(0.8, 0.8, 0.8) });
-    let material_right = Box::new(Metal { albedo: Vec3(0.8, 0.6, 0.2) });
+    let material_left = Box::new(Metal::new_albedo_fuzz(Vec3(0.8, 0.8, 0.8),
+                                                        0.3));
+    let material_right = Box::new(Metal::new_albedo_fuzz(Vec3(0.8, 0.6, 0.2),
+                                                        1.0));
 
     world.add(Box::new(Sphere {
         center: Vec3(0.0, -100.5, -1.0),

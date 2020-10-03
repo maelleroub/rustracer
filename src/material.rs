@@ -34,6 +34,7 @@ impl Material for Lambertian {
         *attenuation = self.albedo;
         return true;
     }
+
     fn box_clone(&self) -> Box<Material> {
         Box::new((*self).clone())
     }
@@ -41,12 +42,20 @@ impl Material for Lambertian {
 
 #[derive(Clone)]
 pub struct Metal {
-    pub albedo: Vec3
+    pub albedo: Vec3,
+    pub fuzz: f64
 }
 
 impl Metal {
     pub fn new() -> Metal {
-        Metal { albedo: Vec3::new() }
+        Metal::new_albedo_fuzz(Vec3(0.0, 0.0, 0.0), 0.0)
+    }
+
+    pub fn new_albedo_fuzz(a: Vec3, f: f64) -> Metal {
+        Metal {
+            albedo: a,
+            fuzz: if f < 1.0 { f } else { 1.0 }
+        }
     }
 }
 
@@ -55,11 +64,12 @@ impl Material for Metal {
         let reflected = Vec3::reflect(r_in.direction.normalize(), rec.normal);
         *scattered = Ray {
             origin: rec.p,
-            direction: reflected
+            direction: reflected + self.fuzz * Vec3::random_in_unit_sphere()
         };
         *attenuation = self.albedo;
         return Vec3::dot(scattered.direction, rec.normal) > 0.0;
     }
+
     fn box_clone(&self) -> Box<Material> {
         Box::new((*self).clone())
     }
