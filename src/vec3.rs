@@ -160,6 +160,16 @@ impl Vec3 {
         Vec3(r * f64::cos(a), r * f64::sin(a), z)
     }
 
+    pub fn random_in_unit_disk() -> Vec3 {
+        loop {
+            let p = Vec3(rt::random_double_range(-1.0, 1.0),
+                        rt::random_double_range(-1.0, 1.0),
+                        0.0);
+            if p.norm_squared() >= 1.0 { continue; }
+            return p;
+        }
+    }
+
     pub fn reflect(v: Vec3, n: Vec3) -> Vec3 {
         v - 2.0 * Vec3::dot(v, n) * n
     }

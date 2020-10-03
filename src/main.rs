@@ -43,9 +43,31 @@ fn main() {
                         Vec3(0.0, -100.5, -1.0),
                         100.0,
                         material_ground)));
+    world.add(Box::new(Sphere::new_center_radius_mat(
+                        Vec3(0.0, 0.0, -1.0),
+                        0.5,
+                        material_center)));
+    world.add(Box::new(Sphere::new_center_radius_mat(
+                        Vec3(-1.0, 0.0, -1.0),
+                        0.5,
+                        material_left.clone())));
+    world.add(Box::new(Sphere::new_center_radius_mat(
+                        Vec3(-1.0, 0.0, -1.0),
+                        -0.45,
+                        material_left)));
+    world.add(Box::new(Sphere::new_center_radius_mat(
+                        Vec3(1.0, 0.0, -1.0),
+                        0.5,
+                        material_right)));
 
     //Camera
-    let camera = Camera::new(Vec3(-2.0, 2.0, 1.0), Vec3(0.0, 0.0, -1.0), Vec3(0.0, 1.0, 0.0), 90.0, aspect_ratio);
+    let lookfrom = Vec3(3.0, 3.0, 2.0);
+    let lookat = Vec3(0.0, 0.0, -1.0);
+    let vup = Vec3(0.0, 1.0, 0.0);
+    let dist_to_focus = (lookfrom - lookat).norm();
+    let aperture = 2.0;
+    let camera = Camera::new(lookfrom, lookat, vup, 20.0, aspect_ratio,
+                             aperture, dist_to_focus);
 
     for j in (0..image.height).rev() {
         for i in 0..image.width {
